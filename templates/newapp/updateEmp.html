@@ -1,0 +1,70 @@
+{% extends 'global/super.html' %}
+{% block content1 %}
+    {% load static %}
+    <div id="content">
+        <p id="whereami">
+        </p>
+        <h1>
+            update Emp info:
+        </h1>
+        <form action="{% url 'newapp:updateemplogic' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <table cellpadding="0" cellspacing="0" border="0"
+                class="form_table">
+                <tr>
+                    <td valign="middle" align="right">
+                        id:
+                    </td>
+                    <td valign="middle" align="left">
+                        {{ emp.id }}<input type="hidden" name="id" value="{{ emp.id }}">
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle" align="right">
+                        name:
+                    </td>
+                    <td valign="middle" align="left">
+                        <input type="text" class="inputgri" name="name" value="{{ emp.name }}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle" align="right">
+                        salary:
+                    </td>
+                    <td valign="middle" align="left">
+                        <input type="text" class="inputgri" name="salary" value="{{ emp.salary }}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle" align="right">
+                        age:
+                    </td>
+                    <td valign="middle" align="left">
+                        <input type="text" class="inputgri" name="age" value="{{ emp.age }}"/>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td valign="middle" align="right">
+                        部门编号:
+                    </td>
+                    <td valign="middle" align="left">
+                        <input type="text" class="inputgri" name="depts" value="{{ emp.depts.id }}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle" align="right">
+                        上传头像:<img src="{% static emp.headimg.url %}" alt="头像" style="width: 50px;height: 50px;">
+                    </td>
+                    <td valign="middle" align="left">
+                        <input type="file" class="inputgri" name="headimg" value="{{ emp.headimg.url }}"/>
+                    </td>
+            </table>
+            <p>
+                <input type="submit" class="button" value="提交" />
+            </p>
+        </form>
+    </div>
+{% endblock %}
+
+

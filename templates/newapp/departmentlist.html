@@ -1,0 +1,65 @@
+{% extends 'global/super.html' %}
+{% block content1 %}
+    {% load static %}
+    <div id="content">
+        <p id="whereami">
+        </p>
+        <h1>
+{#            <img src="{% static headimg %}" alt="头像" style="width: 50px;height:50px">欢迎 {{ username }}&nbsp;#}
+            {% if request.COOKIES.gender == '1' %}
+                先生
+            {% else %}
+                女士
+            {% endif %}
+
+        </h1>
+        <table class="table">
+            <tr class="table_header">
+                <td>ID</td>
+                <td>Name</td>
+                <td>note</td>
+                <td>Operation</td>
+            </tr>
+            {% for pp in page %}
+            <tr class="row1">
+                <td>{{ pp.id }}</td>
+                <td>{{ pp.name }}</td>
+                <td>{{ pp.note }}</td>
+                <td>
+                    <a href="{% url 'newapp:empbydept' %}?deptid={{ pp.id }}">详情</a>
+                    <a href="{% url 'newapp:updatedeptview' %}?deptid={{ pp.id }}">修改</a>
+                </td>
+            </tr>
+            {% endfor %}
+
+        </table>
+        <p>
+            <input type="button" class="button" value="增加部门" onclick="location='{% url 'newapp:addeptview' %}'"/>
+        </p>
+        <div style="text-align: center;width: 720px;height: 32px;">
+        {% if not page.number == 1  %}
+        <a href="{% url 'newapp:deptview' %}?number=1" class="cc">第一页</a>
+        {% endif %}
+        {% if page.has_previous %}
+            <a href="{% url 'newapp:deptview' %}?number={{ page.previous_page_number}}" class="aa">《</a>
+        {% endif %}
+
+            {% for num in page.paginator.page_range %}
+                <a href="{% url 'newapp:deptview' %}?number={{ num }}" {% if num == page.number %}
+                    class="bb apage"
+            {% else %}
+            class="aa apage"
+        {% endif %}>
+                    {{ num }}</a>
+            {% endfor %}
+        {% if page.has_next %}
+        <a href="{% url 'newapp:deptview' %}?number={{ page.next_page_number }}" class="aa">》</a>
+        {% endif %}
+        {% if not page.number == page.paginator.num_pages  %}
+        <a href="{% url 'newapp:deptview' %}?number={{ page.paginator.num_pages }}" class="cc">最后一页</a>
+        {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+

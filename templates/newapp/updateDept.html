@@ -1,0 +1,46 @@
+{% extends 'global/super.html' %}
+{% block content1 %}
+    {% load static %}
+    <div id="content">
+        <p id="whereami">
+        </p>
+        <h1>
+            update dept info:
+        </h1>
+        <form action="{% url 'newapp:updatelogic' %}" method="post">
+            {% csrf_token %}
+            <table cellpadding="0" cellspacing="0" border="0"
+                class="form_table">
+                <tr>
+                    <td valign="middle" align="right">
+                        id:
+                    </td>
+                    <td valign="middle" align="left">
+                        {{ dept.id }}<input type="hidden" name="id" value="{{ dept.id }}">
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle" align="right">
+                        name:
+                    </td>
+                    <td valign="middle" align="left">
+                        <input type="text" class="inputgri" name="name" value="{{ dept.name }}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle" align="right">
+                        note:
+                    </td>
+                    <td valign="middle" align="left">
+                        <input type="text" class="inputgri" name="note" value="{{ dept.note }}"/>
+                    </td>
+                </tr>
+
+            </table>
+            <p>
+                <input type="submit" class="button" value="Confirm" />
+            </p>
+        </form>
+    </div>
+{% endblock %}
+

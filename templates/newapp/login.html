@@ -1,0 +1,128 @@
+{% extends 'global/super.html' %}
+{% block content1 %}
+    {% load static %}
+    <script src="{% static 'js/jquery-1.11.1.min.js' %}"></script>
+    <script>
+    var a=0;
+    var b=0;
+    var c=0;
+    function fun1() {
+        var name=$("#username").val();
+        if(name.length >=1){
+            a=1;
+            }else{
+            a=0;
+        }
+
+    }
+    function fun2() {
+        var pwd=$("#pwd").val();
+        if(pwd.length >=1){
+            b=1;
+            }else{
+            b=0;
+        }
+
+    }
+    function ajax2() {
+            if(window.ActiveXObject){
+                var xhr = new ActiveXObject("Microsoft.XMLHTTP");
+            }else if(window.XMLHttpRequest){
+                var xhr = new XMLHttpRequest;
+            }
+            var number = $("#captcha").val();
+            if(number.length >= 1){
+                xhr.open("post","{% url 'newapp:ajax_captcha' %}");
+                var csrftoken="{{ csrf_token }}";
+                xhr.setRequestHeader("X-CSRFToken",csrftoken);
+                xhr.setRequestHeader("content-type","application/x-www-form-urlencoded");
+                xhr.send("number="+number);
+                $("#captchaimg").attr("src","{% static 'img/load.gif' %}");
+                xhr.onreadystatechange=function(){
+                    if(xhr.readyState == 4 && xhr.status == 200){
+                        var ret = xhr.responseText;
+                        if(ret == "y"){
+                            c=1;
+                            $("#captchaimg").attr("src","{% static 'img/ok.gif' %}");
+                            $("#errors").text("")
+                        }else {
+                            $("#captchaimg").attr("src","{% static 'img/error.jpg' %}");
+                            $("#errors").text(ret);
+                            c=0;
+                            }
+                        }
+                    }
+            }
+        }
+        function fun3() {
+            if(a && b && c){
+                $("#form1").submit()
+            }else{
+                alert("数据不完善，请仔细填写！")
+            }
+        }
+    </script>
+    <div id="content">
+        <p id="whereami">
+        </p>
+        <h1>
+            login
+        </h1>
+        <form action="{% url 'newapp:loglogic' %}" method="post" id="form1">
+            {% csrf_token %}
+            <table cellpadding="0" cellspacing="0" border="0"
+                class="form_table">
+                <tr>
+                    <td valign="middle" align="right">
+                        username:
+                    </td>
+                    <td valign="middle" align="left">
+                        <input type="text" class="inputgri" name="username" value="{{ username|default:'' }}" onblur="fun1();" id="username"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="middle" align="right">
+                        password:
+                    </td>
+                    <td valign="middle" align="left">
+                        <input type="password" class="inputgri" name="password" onblur="fun2();" id="pwd"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td valign="middle" align="right">
+                        验证码:
+
+                    </td>
+                    <td valign="middle" align="left">
+
+                        <input type="text" class="inputgri" name="number" onblur="ajax2();" id="captcha" style="width: 80px;"/>
+                        <img id="num" src="{% url 'newapp:captcha' %}" style="width: 70px;vertical-align: middle"/>
+                        <a href="javascript:;" onclick="document.getElementById('num').src = '{% url 'newapp:captcha' %}?'+(new Date()).getTime()">换一张</a>
+                        <img  id="captchaimg" style="vertical-align: middle;height: 20px;" >
+                                <span style="color: red" id="errors"></span>
+                    </td>
+                    </tr>
+                <tr>
+                    <td valign="middle" align="right">
+                    </td>
+                    <td colspan="2" style="height: 30px ; line-height:30px ;">
+                        <input type="checkbox" name="remember" value="y" >
+                        <span>记住账号七天</span></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        {% if  request.session.login == 'n' %}
+{#                            <span style="color: red;font-size: 14px">账号或密码错误请重新登录</span>#}
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
+            <p>
+                <input type="button" class="button" value="Submit &raquo;" id="butsub" onclick="fun3();"/>
+            </p>
+        </form>
+    </div>
+{% endblock %}
+
+

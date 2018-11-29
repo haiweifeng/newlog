@@ -1,0 +1,39 @@
+{% extends 'global/super.html' %}
+{% block content1 %}
+    {% load static %}
+    <div id="content">
+        <p id="whereami">
+        </p>
+        <h1>
+            {{ dept.name }}
+        </h1>
+        <table class="table">
+            <tr class="table_header">
+                <td>ID</td>
+                <td>Name</td>
+                <td>Salary</td>
+                <td>Age</td>
+                <td>Headimg</td>
+                <td>Operation</td>
+            </tr>
+            {% for emp in emps %}
+            <tr class="row1">
+                <td>{{ emp.id }}</td>
+                <td>{{ emp.name }}</td>
+                <td>{{ emp.salary }}</td>
+                <td>{{ emp.age }}</td>
+                <td><img src="{% static emp.headimg.url %}" alt="头像" style="width: 50px;height: 50px;"></td>
+                <td>
+                    <a href="{% url 'newapp:deleteemp' %}?id={{ emp.id }}">删除员工</a>&nbsp;<a href="{% url 'newapp:updateempview' %}?id={{ emp.id }}">更新员工</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <p>
+            <input type="button" class="button" value="增加员工" onclick="location='{% url 'newapp:addempview' %}?deptid={{ dept.id }}'"/>
+            &nbsp;&nbsp;<input type="button" class="button" value="返回部门" onclick="location='{% url 'newapp:deptview' %}'"/>
+        </p>
+    </div>
+{% endblock %}
+
+
